@@ -35,7 +35,7 @@ from .const import (
 
 _LOGGER = logging.getLogger(__name__)
 
-PLATFORMS = [Platform.CLIMATE, Platform.SWITCH]
+PLATFORMS = [Platform.CLIMATE, Platform.SWITCH, Platform.SENSOR]
 
 async def async_setup(hass: HomeAssistant, config: dict):
     hass.data.setdefault(DOMAIN, {})
@@ -79,7 +79,7 @@ async def async_update_options(hass: HomeAssistant, entry: ConfigEntry) -> None:
 async def async_unload_entry(hass: HomeAssistant, config_entry: ConfigEntry) -> bool:
     """Unload a config entry."""
     _LOGGER.debug("Unloading setup entry: %s, data: %s, options: %s", config_entry.entry_id, config_entry.data, config_entry.options)
-    unload_ok = await hass.config_entries.async_unload_platforms(config_entry, [Platform.SWITCH, Platform.CLIMATE])
+    unload_ok = await hass.config_entries.async_unload_platforms(config_entry, [Platform.SWITCH, Platform.CLIMATE, Platform.SENSOR])
     return unload_ok
 
 class UponorStateProxy:
@@ -148,6 +148,19 @@ class UponorStateProxy:
         var = thermostat + '_rh'
         if var in self._data and int(self._data[var]) >= TOO_LOW_HUMIDITY_LIMIT:
             return int(self._data[var])
+        
+    def has_floor_temperature(self, thermostat):
+        var = thermostat + '_external_temperature'
+        return var in self._data and int(self._data[var]) != 32767
+
+    def get_floor_temperature(self, thermostat):
+        var = thermostat + '_external_temperature'
+        if var in self._data:
+            temp = int(self._data[var])
+            if temp != 32767 and temp <= TOO_HIGH_TEMP_LIMIT:
+                return round((temp - 320) / 18, 1)
+        return None
+
 
     # Temperature setpoint
 
