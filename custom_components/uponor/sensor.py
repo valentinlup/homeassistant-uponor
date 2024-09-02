@@ -56,6 +56,7 @@ class UponorHumiditySensor(SensorEntity):
         self._attr_name = f"{state_proxy.get_room_name(thermostat)} humidity"
         self._attr_unique_id = f"{state_proxy.get_thermostat_id(thermostat)}_rh"
         self._attr_device_class = SensorDeviceClass.HUMIDITY
+        self._attr_native_unit_of_measurement = PERCENTAGE
 
     @property
     def device_info(self):
