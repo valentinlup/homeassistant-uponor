@@ -1,5 +1,5 @@
-from homeassistant.components.sensor import SensorEntity
-from homeassistant.const import UnitOfTemperature
+from homeassistant.components.sensor import SensorDeviceClass, SensorEntity
+from homeassistant.const import UnitOfTemperature, PERCENTAGE
 from homeassistant.core import callback
 from homeassistant.helpers.dispatcher import async_dispatcher_connect
 
@@ -55,7 +55,7 @@ class UponorHumiditySensor(SensorEntity):
         self._thermostat = thermostat
         self._attr_name = f"{state_proxy.get_room_name(thermostat)} humidity"
         self._attr_unique_id = f"{state_proxy.get_thermostat_id(thermostat)}_rh"
-        self._attr_native_unit_of_measurement = UnitOfTemperature.CELSIUS
+        self._attr_device_class = SensorDeviceClass.HUMIDITY
 
     @property
     def device_info(self):
