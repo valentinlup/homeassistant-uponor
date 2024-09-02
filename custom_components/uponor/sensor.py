@@ -69,7 +69,7 @@ class UponorHumiditySensor(SensorEntity):
 
     @property
     def native_value(self):
-        return self._state_proxy.get_floor_temperature(self._thermostat)
+        return self._state_proxy.get_humidity(self._thermostat)
 
     async def async_added_to_hass(self):
         self.async_on_remove(
