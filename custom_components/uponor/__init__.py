@@ -146,7 +146,7 @@ class UponorStateProxy:
 
     def has_humidity_sensor(self, thermostat):
         var = thermostat + '_rh'
-        return var in self._data
+        return var in self._data and int(self._data[var]) != 0
         
     def get_humidity(self, thermostat):
         var = thermostat + '_rh'
