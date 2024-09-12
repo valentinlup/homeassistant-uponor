@@ -70,6 +70,11 @@ class UponorHumiditySensor(SensorEntity):
         }
 
     @property
+    def available(self):
+        """Return True if the sensor is available."""
+        return self._state_proxy.is_thermostat_connected(self._thermostat) && self._state_proxy.has_humidity_sensor(self._thermostat)
+
+    @property
     def native_value(self):
         return self._state_proxy.get_humidity(self._thermostat)
 
