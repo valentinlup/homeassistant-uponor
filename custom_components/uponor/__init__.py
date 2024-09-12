@@ -144,6 +144,10 @@ class UponorStateProxy:
         if var in self._data:
             return round((int(self._data[var]) - 320) / 18, 1)
 
+    def has_humidity_sensor(self, thermostat):
+        var = thermostat + '_rh'
+        return var in self._data
+        
     def get_humidity(self, thermostat):
         var = thermostat + '_rh'
         if var in self._data and int(self._data[var]) >= TOO_LOW_HUMIDITY_LIMIT:
