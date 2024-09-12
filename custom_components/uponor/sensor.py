@@ -60,11 +60,6 @@ class UponorHumiditySensor(SensorEntity):
         self._attr_native_unit_of_measurement = PERCENTAGE
 
     @property
-    def available(self):
-        """Return True if the sensor is available."""
-        return self._state_proxy.is_thermostat_connected(self._thermostat)
-
-    @property
     def device_info(self):
         return {
             "identifiers": {(DOMAIN, self._state_proxy.get_thermostat_id(self._thermostat))},
