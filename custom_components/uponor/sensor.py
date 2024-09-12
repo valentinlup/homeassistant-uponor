@@ -12,7 +12,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     for thermostat in hass.data[DOMAIN]["thermostats"]:
         if state_proxy.has_floor_temperature(thermostat):
             entities.append(UponorFloorTemperatureSensor(state_proxy, thermostat))
-        if state_proxy.has_humidity_sensor(thermostat):
+        if state_proxy.has_humidity_sensor(state_proxy, thermostat):
             entities.append(UponorHumiditySensor(state_proxy, thermostat))
     
     async_add_entities(entities, update_before_add=False)
