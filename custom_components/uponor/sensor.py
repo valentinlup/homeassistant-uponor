@@ -12,6 +12,7 @@ async def async_setup_entry(hass, entry, async_add_entities):
     for thermostat in hass.data[DOMAIN]["thermostats"]:
         if state_proxy.has_floor_temperature(thermostat):
             entities.append(UponorFloorTemperatureSensor(state_proxy, thermostat))
+        if state_proxy.has_humidity_sensor(thermostat):
             entities.append(UponorHumiditySensor(state_proxy, thermostat))
     
     async_add_entities(entities, update_before_add=False)
@@ -57,6 +58,11 @@ class UponorHumiditySensor(SensorEntity):
         self._attr_unique_id = f"{state_proxy.get_thermostat_id(thermostat)}_rh"
         self._attr_device_class = SensorDeviceClass.HUMIDITY
         self._attr_native_unit_of_measurement = PERCENTAGE
+
+    @property
+    def available(self):
+        """Return True if the sensor is available."""
+        return self._state_proxy.is_thermostat_connected(self._thermostat)
 
     @property
     def device_info(self):
